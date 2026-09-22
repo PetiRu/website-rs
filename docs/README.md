@@ -1,16 +1,15 @@
 # Documentation index
 
-This folder contains the public project documentation and localized overviews.
+This documentation set explains the structure, security design, and usage model of `website-rs`.
 
-## Main docs
+## Main documentation
 
-- [Architecture guide](ARCHITECTURE.md)
-- [Development guide](../CONTRIBUTING.md)
+- [Architecture](ARCHITECTURE.md)
+- [Contributing guide](../CONTRIBUTING.md)
 - [Security policy](../SECURITY.md)
 
-## Language guides
+## Localized documentation
 
-- [English](../README.md)
 - [Hungarian](README.hu.md)
 - [Spanish](README.es.md)
 - [French](README.fr.md)
@@ -24,8 +23,8 @@ This folder contains the public project documentation and localized overviews.
 
 ## Design principles
 
-- small modules over large abstractions
-- explicit security boundaries
-- clear request handling flow
-- predictable caching behavior
-- strong defaults without hidden magic
+- modular boundaries over monolithic code
+- safe defaults over hidden behavior
+- explicit security checks over ad-hoc assumptions
+- readable and testable code over clever shortcuts
+- strong request handling and encryption hygiene

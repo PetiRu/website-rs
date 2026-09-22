@@ -1,45 +1,49 @@
 # website-rs
 
-A secure, modular, and production-minded Rust workspace for modern web services.
+Secure Rust building blocks for modern web apps, APIs, and protected services.
 
 <div align="center">
   <img src="https://img.shields.io/badge/Rust-1.75%2B-orange?style=for-the-badge&logo=rust" alt="Rust 1.75+" />
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
-  <img src="https://img.shields.io/badge/Status-Active-success.svg" alt="Active" />
+  <img src="https://img.shields.io/badge/Status-Security%20Focused-success.svg" alt="Security Focused" />
+  <img src="https://img.shields.io/badge/Workspace-Modular-8A2BE2.svg" alt="Modular Workspace" />
 </div>
 
-`website-rs` brings together the building blocks most web services need but rarely want to reimplement from scratch:
+`website-rs` is a modular Rust workspace for building safer web services. It combines the most common pieces needed in real-world API and website infrastructure:
 
 - authenticated encryption for sensitive data
-- request validation and body-size enforcement
-- deterministic route resolution
-- cache-aware response handling
-- HTTP hardening primitives
-- typed configuration and tracing
+- request validation and safe API handling
+- route-based dispatch and cache-aware logic
+- website protection policies and HTTP hardening
+- typed configuration and observability
+- clean separation of concerns for easy framework integration
 
-## Why this project exists
+## Overview
 
-Modern web infrastructure needs more than a framework. It needs safe defaults, modular boundaries, and clear security practices.
+This project is designed for teams that want:
 
-This workspace is intentionally small and composable so you can plug it into Actix, Axum, Warp, or any other Rust server stack without locking into a single framework.
+- strong defaults without a giant monolith
+- reusable Rust building blocks
+- easy integration with Actix, Axum, or custom server layers
+- secure patterns for API construction and web protection
 
-## Architecture at a glance
+## Project structure
 
 ```text
 website-rs/
 ├── crates/
-│   ├── encryption/          # AES-256-GCM authenticated encryption
-│   ├── api/                 # request/response primitives and limits
-│   ├── cache/               # TTL cache and bounded in-memory store
-│   ├── router/              # route matching and cache keys
-│   ├── website-protection/  # security headers, origin checks, rate limiting
-│   ├── config/             # environment-driven configuration
-│   └── observability/       # tracing and logging helpers
+│   ├── encryption/
+│   ├── api/
+│   ├── cache/
+│   ├── router/
+│   ├── website-protection/
+│   ├── config/
+│   └── observability/
 ├── examples/
-│   └── secure-service/     # example application
+│   └── secure-service/
 ├── docs/
-│   ├── README.md           # documentation index
-│   ├── ARCHITECTURE.md     # design guide
+│   ├── README.md
+│   ├── ARCHITECTURE.md
 │   ├── README.hu.md
 │   ├── README.es.md
 │   ├── README.fr.md
@@ -50,6 +54,12 @@ website-rs/
 │   ├── README.ar.md
 │   ├── README.ru.md
 │   └── README.zh.md
+├── website-protection/
+│   └── README.md
+├── cache/
+│   └── README.md
+├── router/
+│   └── README.md
 ├── .github/
 │   ├── workflows/
 │   └── dependabot.yml
@@ -59,29 +69,35 @@ website-rs/
 ├── CONTRIBUTING.md
 ├── rustfmt.toml
 ├── README.md
-└── .gitignore
+├── .gitignore
+└── docs/README.md
 ```
 
-## Feature highlights
+## Security-first design
 
-### Security-first foundation
+The workspace is structured around small, auditable building blocks instead of a single giant server abstraction.
 
-- AES-256-GCM encryption with associated data
-- explicit key handling with no unsafe magic defaults
-- request limit enforcement to control abuse
-- hardened HTTP headers and origin checks
-- rate limiting for abuse and brute-force protection
+Core principles:
 
-### Web-ready primitives
+- protect sensitive data with authenticated encryption
+- enforce request and payload limits early
+- validate origins and apply security headers
+- limit abuse with rate limiting
+- cache only what is safe to cache
+- log behavior, not secrets
+- use TLS and a secret manager in production
 
-- clean request and response models
-- exact route matching and cache-key generation
-- TTL-based in-memory cache
-- observability hooks for tracing and logs
+## Key modules
 
-### Modular design
-
-The workspace is intentionally split into independent crates so each layer can evolve, test, and reuse without creating a monolithic server implementation.
+| Module | Purpose |
+| --- | --- |
+| `website-encryption` | AES-256-GCM encryption and authenticated payload handling |
+| `website-api` | request/response types, enforcement, and shared API boundaries |
+| `website-cache` | in-memory TTL cache and bounded storage behavior |
+| `website-router` | route matching and stable cache key generation |
+| `website-protection` | headers, origins, rate limiting, and HTTP safeguards |
+| `website-config` | typed environment configuration |
+| `website-observability` | tracing and structured logging helpers |
 
 ## Quick start
 
@@ -107,27 +123,25 @@ fn main() -> Result<(), website_encryption::Error> {
 }
 ```
 
-## Recommended usage flow
+## Recommended request flow
 
-1. Parse the incoming HTTP request.
-2. Enforce request-size limits.
-3. Validate origin and method.
-4. Apply security headers and rate limiting.
-5. Resolve the route and authorize the request.
-6. Use the cache only for safe responses.
-7. Encrypt sensitive values with contextual associated data.
-8. Trace the request and never log secrets.
+1. Parse the HTTP request
+2. Validate method and request size
+3. Enforce security headers and origin rules
+4. Apply rate limiting
+5. Resolve the routing target
+6. Cache only safe responses
+7. Encrypt sensitive values with purpose-specific associated data
+8. Trace the request without logging secrets
 
 ## Documentation
 
 - [Documentation index](docs/README.md)
 - [Architecture guide](docs/ARCHITECTURE.md)
-- [Contribution guide](CONTRIBUTING.md)
+- [Contributing guide](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 
 ## Multilingual documentation
-
-This project includes readable documentation in multiple languages:
 
 - [English](README.md)
 - [Hungarian](docs/README.hu.md)
@@ -151,11 +165,11 @@ cargo test --workspace --all-features
 
 ## Security guidance
 
-- store secrets in a secret manager, not in source control
+- store keys outside the repository
 - use TLS/HTTPS in production
-- rotate encryption keys on a schedule
-- avoid trusting client-side validation as a security boundary
-- never log raw credentials, tokens, or plaintext secrets
+- rotate secrets on a controlled schedule
+- never trust client-side validation as a security boundary
+- avoid logging raw tokens, cookies, passwords, or secrets
 
 ## License
 
