@@ -1,77 +1,94 @@
 # website-rs
 
-A secure, modular Rust workspace for modern web services with:
+A secure, modular, and production-minded Rust workspace for modern web services.
 
-- authenticated encryption
-- request validation and safe API handling
-- cache-aware routing
-- website protection primitives
-- structured observability
-- security-first defaults
+<div align="center">
+  <img src="https://img.shields.io/badge/Rust-1.75%2B-orange?style=for-the-badge&logo=rust" alt="Rust 1.75+" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="MIT License" />
+  <img src="https://img.shields.io/badge/Status-Active-success.svg" alt="Active" />
+</div>
 
-[![CI](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+`website-rs` brings together the building blocks most web services need but rarely want to reimplement from scratch:
 
-## Why website-rs?
+- authenticated encryption for sensitive data
+- request validation and body-size enforcement
+- deterministic route resolution
+- cache-aware response handling
+- HTTP hardening primitives
+- typed configuration and tracing
 
-`website-rs` is designed for teams building backend services, APIs, or web-facing apps where security, maintainability, and modularity matter. It brings together the foundation blocks you usually have to assemble manually:
+## Why this project exists
 
-- encrypted data handling
-- request validation and limits
-- route dispatch and response caching
-- security policy helpers
-- typed configuration
-- easy integration with any Rust web framework
+Modern web infrastructure needs more than a framework. It needs safe defaults, modular boundaries, and clear security practices.
 
-## Project overview
+This workspace is intentionally small and composable so you can plug it into Actix, Axum, Warp, or any other Rust server stack without locking into a single framework.
+
+## Architecture at a glance
 
 ```text
-website-rs
+website-rs/
 ├── crates/
-│   ├── encryption/          # AES-256-GCM secure payload handling
-│   ├── api/                 # request/response primitives
-│   ├── cache/               # memory cache and TTL logic
-│   ├── router/              # route matching and cache key generation
-│   ├── website-protection/  # headers, origin checks, rate limiting
-│   ├── config/             # environment driven configuration
-│   └── observability/      # tracing setup
+│   ├── encryption/          # AES-256-GCM authenticated encryption
+│   ├── api/                 # request/response primitives and limits
+│   ├── cache/               # TTL cache and bounded in-memory store
+│   ├── router/              # route matching and cache keys
+│   ├── website-protection/  # security headers, origin checks, rate limiting
+│   ├── config/             # environment-driven configuration
+│   └── observability/       # tracing and logging helpers
 ├── examples/
-│   └── secure-service/     # secure example app
-├── docs/                   # docs and language translations
-├── .github/                # CI and dependency automation
-├── Cargo.toml              # workspace root
-├── README.md               # project overview
-├── LICENSE                 # MIT license
-├── SECURITY.md            # security disclosure policy
-├── CONTRIBUTING.md         # development guide
-└── rustfmt.toml           # formatting policy
+│   └── secure-service/     # example application
+├── docs/
+│   ├── README.md           # documentation index
+│   ├── ARCHITECTURE.md     # design guide
+│   ├── README.hu.md
+│   ├── README.es.md
+│   ├── README.fr.md
+│   ├── README.de.md
+│   ├── README.pt.md
+│   ├── README.ja.md
+│   ├── README.ko.md
+│   ├── README.ar.md
+│   ├── README.ru.md
+│   └── README.zh.md
+├── .github/
+│   ├── workflows/
+│   └── dependabot.yml
+├── Cargo.toml
+├── LICENSE
+├── SECURITY.md
+├── CONTRIBUTING.md
+├── rustfmt.toml
+├── README.md
+└── .gitignore
 ```
 
-## Core modules
+## Feature highlights
 
-| Crate | Purpose |
-| --- | --- |
-| `website-encryption` | Authenticated encryption using AES-256-GCM |
-| `website-api` | Request and response building blocks with limits |
-| `website-cache` | TTL-based cache abstraction and bounded memory cache |
-| `website-router` | Route matching and deterministic cache keys |
-| `website-protection` | Security headers, origin checks, and rate limiting |
-| `website-config` | Typed environment configuration |
-| `website-observability` | Logging and tracing initialization |
+### Security-first foundation
 
-## Security-first design
+- AES-256-GCM encryption with associated data
+- explicit key handling with no unsafe magic defaults
+- request limit enforcement to control abuse
+- hardened HTTP headers and origin checks
+- rate limiting for abuse and brute-force protection
 
-This project intentionally favors small, auditable building blocks instead of one giant server framework.
+### Web-ready primitives
 
-Recommended architecture:
+- clean request and response models
+- exact route matching and cache-key generation
+- TTL-based in-memory cache
+- observability hooks for tracing and logs
 
-1. Accept requests at the network boundary.
-2. Validate and cap request sizes.
-3. Apply origin, header, and rate-limit checks.
-4. Resolve the route.
-5. Cache only responses that are safe to cache.
-6. Encrypt sensitive data with explicit associated data.
-7. Log metadata only; never log keys, credentials, or raw secrets.
+### Modular design
+
+The workspace is intentionally split into independent crates so each layer can evolve, test, and reuse without creating a monolithic server implementation.
+
+## Quick start
+
+```bash
+cargo test --workspace
+cargo run --manifest-path examples/secure-service/Cargo.toml
+```
 
 ## Example
 
@@ -90,25 +107,29 @@ fn main() -> Result<(), website_encryption::Error> {
 }
 ```
 
-## Quick start
+## Recommended usage flow
 
-```bash
-cargo test --workspace
-cargo run --manifest-path examples/secure-service/Cargo.toml
-```
+1. Parse the incoming HTTP request.
+2. Enforce request-size limits.
+3. Validate origin and method.
+4. Apply security headers and rate limiting.
+5. Resolve the route and authorize the request.
+6. Use the cache only for safe responses.
+7. Encrypt sensitive values with contextual associated data.
+8. Trace the request and never log secrets.
 
-## Development
+## Documentation
 
-```bash
-cargo fmt --all -- --check
-cargo clippy --workspace --all-targets --all-features -- -D warnings
-cargo test --workspace --all-features
-```
+- [Documentation index](docs/README.md)
+- [Architecture guide](docs/ARCHITECTURE.md)
+- [Contribution guide](CONTRIBUTING.md)
+- [Security policy](SECURITY.md)
 
-## Language documentation
+## Multilingual documentation
 
-English is the default. The project documentation is also provided in these languages:
+This project includes readable documentation in multiple languages:
 
+- [English](README.md)
 - [Hungarian](docs/README.hu.md)
 - [Spanish](docs/README.es.md)
 - [French](docs/README.fr.md)
@@ -117,28 +138,24 @@ English is the default. The project documentation is also provided in these lang
 - [Japanese](docs/README.ja.md)
 - [Korean](docs/README.ko.md)
 - [Arabic](docs/README.ar.md)
-- [Chinese (Simplified)](docs/README.zh.md)
 - [Russian](docs/README.ru.md)
+- [Chinese (Simplified)](docs/README.zh.md)
 
-## Security notes
+## Development checks
 
-- Keep encryption keys outside version control.
-- Use TLS everywhere in production.
-- Rotate keys with a controlled migration process.
-- Never trust client-side validation as a security boundary.
-- Prefer a real secret manager for production secrets.
+```bash
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace --all-features
+```
 
-## Roadmap
+## Security guidance
 
-- add framework adapters for Actix and Axum
-- add example middleware stacks
-- add a secure session abstraction
-- add API contract validation helpers
-- add more production-grade security utilities
-
-## Contributing
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before making changes.
+- store secrets in a secret manager, not in source control
+- use TLS/HTTPS in production
+- rotate encryption keys on a schedule
+- avoid trusting client-side validation as a security boundary
+- never log raw credentials, tokens, or plaintext secrets
 
 ## License
 
