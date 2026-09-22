@@ -1,0 +1,10 @@
+[package]
+name = "website-api"
+version = "0.1.0"
+description = "Framework-agnostic web request primitives"
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+thiserror.workspace = true

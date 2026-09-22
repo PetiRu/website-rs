@@ -1,0 +1,9 @@
+[package]
+name = "website-config"
+version = "0.1.0"
+description = "Typed environment configuration"
+license.workspace = true
+edition.workspace = true
+
+[dependencies]
+thiserror.workspace = true

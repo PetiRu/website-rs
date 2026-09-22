@@ -1,0 +1,13 @@
+[package]
+name = "website-encryption"
+version = "0.1.0"
+description = "Authenticated encryption primitives for web services"
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+aes-gcm = "0.10"
+rand = "0.8"
+thiserror.workspace = true
+zeroize = "1.7"

@@ -1,0 +1,9 @@
+[package]
+name = "website-router"
+version = "0.1.0"
+description = "Deterministic route matching and cache-aware dispatch"
+license.workspace = true
+edition.workspace = true
+
+[dependencies]
+website-cache = { path = "../cache" }

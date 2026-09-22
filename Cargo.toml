@@ -1,0 +1,21 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/encryption",
+    "crates/api",
+    "crates/cache",
+    "crates/router",
+    "crates/website-protection",
+    "crates/config",
+    "crates/observability",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT"
+rust-version = "1.75"
+repository = "https://github.com/PetiRu/website-rs"
+
+[workspace.dependencies]
+thiserror = "1.0"
+serde = { version = "1.0", features = ["derive"] }
