@@ -1,30 +1,35 @@
 # Documentation index
 
-This documentation set explains the structure, security design, and usage model of `website-rs`.
+Welcome to the `website-rs` documentation. Start with the guide that matches your goal.
 
-## Main documentation
+## Start here
 
-- [Architecture](ARCHITECTURE.md)
-- [Contributing guide](../CONTRIBUTING.md)
-- [Security policy](../SECURITY.md)
+| Goal | Recommended document |
+| --- | --- |
+| Understand the project | [Main README](../README.md) |
+| Understand module boundaries | [Architecture guide](ARCHITECTURE.md) |
+| Contribute code | [Contributing guide](../CONTRIBUTING.md) |
+| Report a vulnerability | [Security policy](../SECURITY.md) |
 
-## Localized documentation
+## Localized overviews
 
-- [Hungarian](README.hu.md)
-- [Spanish](README.es.md)
-- [French](README.fr.md)
-- [German](README.de.md)
-- [Portuguese](README.pt.md)
-- [Japanese](README.ja.md)
-- [Korean](README.ko.md)
-- [Arabic](README.ar.md)
-- [Russian](README.ru.md)
-- [Chinese (Simplified)](README.zh.md)
+- [Hungarian / Magyar](README.hu.md)
+- [Spanish / Español](README.es.md)
+- [French / Français](README.fr.md)
+- [German / Deutsch](README.de.md)
+- [Portuguese / Português](README.pt.md)
+- [Japanese / 日本語](README.ja.md)
+- [Korean / 한국어](README.ko.md)
+- [Arabic / العربية](README.ar.md)
+- [Russian / Русский](README.ru.md)
+- [Simplified Chinese / 简体中文](README.zh.md)
 
-## Design principles
+## Documentation principles
 
-- modular boundaries over monolithic code
-- safe defaults over hidden behavior
-- explicit security checks over ad-hoc assumptions
-- readable and testable code over clever shortcuts
-- strong request handling and encryption hygiene
+The documentation follows the same principles as the code:
+
+- explain boundaries before implementation details
+- show safe usage before advanced usage
+- identify production limitations honestly
+- keep security-sensitive behavior explicit
+- prefer short examples that can be tested
