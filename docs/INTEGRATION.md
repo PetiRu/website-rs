@@ -1,35 +1,38 @@
-# 🧩 Easy integration
+# Easy integration
 
-`website-rs` is framework-agnostic by design. Add only the crates you need to an existing or new Rust site.
+The project is designed for incremental adoption. Add only the package that matches your stack.
 
-## Add selected modules
+## Rust
 
 ```toml
 [dependencies]
 website-api = { git = "https://github.com/PetiRu/website-rs" }
 website-protection = { git = "https://github.com/PetiRu/website-rs" }
-website-encryption = { git = "https://github.com/PetiRu/website-rs" }
+website-captcha = { git = "https://github.com/PetiRu/website-rs" }
+website-csrf = { git = "https://github.com/PetiRu/website-rs" }
 ```
 
-For a local workspace, use path dependencies instead.
+Translate your framework request into `website_api::Request`, enforce limits, apply protection, verify CSRF for cookie-authenticated state-changing requests, then dispatch your handler.
 
-## Adapter pattern
+## Python, JavaScript, and TypeScript
 
-Translate your framework request into `website_api::Request`, apply body limits and protection, resolve your framework handler, then translate the response back. The crates do not require Axum, Actix, Warp, Rocket, or a specific runtime.
+Install the local package while developing:
 
-## Captcha integration
-
-The optional `website-captcha` crate provides a one-time challenge store and a simple arithmetic challenge suitable for low-risk forms and development. It is not a replacement for bot detection, rate limiting, email verification, or a production CAPTCHA provider.
-
-```rust
-use std::time::Duration;
-use website_captcha::{ChallengeStore, MemoryCaptcha};
-
-let captcha = MemoryCaptcha::new();
-let (challenge, answer_for_demo) = captcha.issue_math(Duration::from_secs(120));
-// Render `challenge.prompt` and keep `challenge.token` with the form.
-captcha.verify(&challenge.token, &answer_for_demo)?;
-# Ok::<(), website_captcha::Error>(())
+```bash
+pip install -e packages/python
+cd packages/javascript && npm install
+cd ../typescript && npm install
 ```
 
-For multiple application instances, implement `ChallengeStore` over Redis or another shared store. Never expose the expected answer to a browser in a real application.
+The companion packages expose small helpers for security headers, rate limiting, CAPTCHA examples, and Web Crypto where supported. They are intentionally framework-neutral, so they can be wrapped by Flask/FastAPI, Express/Fastify, or another server.
+
+## Existing-site checklist
+
+1. Put TLS and a trusted proxy configuration at the edge.
+2. Add body limits before parsing large payloads.
+3. Add security headers without overwriting deliberate application policy.
+4. Apply rate limits by a carefully chosen identity.
+5. Use CSRF protection for cookie-authenticated state changes.
+6. Never cache private responses or authorization-bearing data.
+7. Keep keys and CAPTCHA answers server-side.
+8. Add integration tests for rejection paths.

@@ -1,11 +1,11 @@
 # website-rs
 
-Un kit modulare Rust per siti web e API più sicuri.
+Una toolkit Rust modulare per siti web e API più sicuri, con crittografia, limiti alle richieste, routing, cache, security headers, rate limiting, CAPTCHA e CSRF.
 
-Include cifratura autenticata, limiti alle richieste, routing, cache, header di sicurezza, rate limiting e challenge CAPTCHA monouso opzionali. I moduli possono essere aggiunti separatamente a progetti Rust esistenti.
+I pacchetti Python, JavaScript e TypeScript nella cartella `packages/` permettono di integrare gradualmente le funzioni in progetti esistenti.
 
 ```bash
 cargo test --workspace
 ```
 
-Consulta la [guida d'integrazione](INTEGRATION.md), l'[architettura](ARCHITECTURE.md) e il [README principale](../README.md). CAPTCHA non sostituisce TLS, autorizzazione o una protezione anti-bot professionale.
+Leggi la [guida d'integrazione](INTEGRATION.md), l'[architettura](ARCHITECTURE.md) e il [README principale](../README.md).

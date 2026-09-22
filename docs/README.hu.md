@@ -1,29 +1,11 @@
 # website-rs
 
-Moduláris, biztonságközpontú Rust munkaterület weboldalak és API-k építéséhez.
+Moduláris Rust biztonsági eszköztár webhelyekhez és API-khoz. Tartalmaz titkosítást, kéréskorlátokat, routingot, cache-t, biztonsági fejléceket, rate limitinget, CAPTCHA- és CSRF-primitíveket.
 
-## Fő funkciók
-
-- hitelesített AES-256-GCM titkosítás
-- HTTP kérés- és válaszkezelési alapok
-- TTL cache és útválasztás
-- biztonsági fejlécek, origin-ellenőrzés és rate limiting
-- opcionális, egyszer használható matematikai CAPTCHA-primitív
-- könnyű integráció Axum, Actix, Warp vagy saját szerverréteggel
-
-## Gyors kezdés
+A Rust mellett könnyű Python, JavaScript és TypeScript csomagok is találhatók a `packages/` könyvtárban, így a meglévő webhelyek fokozatosan bővíthetők.
 
 ```bash
 cargo test --workspace
-cargo run --manifest-path examples/secure-service/Cargo.toml
 ```
 
-## Integráció
-
-A szükséges crate-eket külön is hozzáadhatod a `Cargo.toml` fájlhoz. A `website-captcha` fejlesztéshez és alacsony kockázatú űrlapokhoz használható; éles rendszernél közös tároló, rate limiting és további botvédelem szükséges.
-
-Részletek: [integrációs útmutató](INTEGRATION.md), [architektúra](ARCHITECTURE.md), [fő README](../README.md).
-
-## Biztonság
-
-A kulcsokat ne tárold Gitben, használj TLS-t, és ne kezeld a kliensoldali validációt biztonsági határként.
+Dokumentáció: [integráció](INTEGRATION.md), [architektúra](ARCHITECTURE.md), [fő README](../README.md).
