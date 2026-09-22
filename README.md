@@ -1,23 +1,94 @@
 # website-rs
 
+A secure, modular Rust workspace for modern web services with:
+
+- authenticated encryption
+- request validation and safe API handling
+- cache-aware routing
+- website protection primitives
+- structured observability
+- security-first defaults
+
 [![CI](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A modular, security-first Rust toolkit for web services: authenticated data encryption, typed API requests, cache-aware routing, and practical website protection primitives.
+## Why website-rs?
 
-> **Status:** Early-stage foundation. APIs may change. This project is not a replacement for a security review, TLS, a secret manager, or a production-grade reverse proxy.
+`website-rs` is designed for teams building backend services, APIs, or web-facing apps where security, maintainability, and modularity matter. It brings together the foundation blocks you usually have to assemble manually:
 
-## Modules
+- encrypted data handling
+- request validation and limits
+- route dispatch and response caching
+- security policy helpers
+- typed configuration
+- easy integration with any Rust web framework
+
+## Project overview
+
+```text
+website-rs
+├── crates/
+│   ├── encryption/          # AES-256-GCM secure payload handling
+│   ├── api/                 # request/response primitives
+│   ├── cache/               # memory cache and TTL logic
+│   ├── router/              # route matching and cache key generation
+│   ├── website-protection/  # headers, origin checks, rate limiting
+│   ├── config/             # environment driven configuration
+│   └── observability/      # tracing setup
+├── examples/
+│   └── secure-service/     # secure example app
+├── docs/                   # docs and language translations
+├── .github/                # CI and dependency automation
+├── Cargo.toml              # workspace root
+├── README.md               # project overview
+├── LICENSE                 # MIT license
+├── SECURITY.md            # security disclosure policy
+├── CONTRIBUTING.md         # development guide
+└── rustfmt.toml           # formatting policy
+```
+
+## Core modules
 
 | Crate | Purpose |
 | --- | --- |
-| `website-encryption` | AES-256-GCM authenticated data encryption |
-| `website-api` | Framework-agnostic request/response types and body limits |
-| `website-cache` | Pluggable cache trait and bounded in-memory implementation |
-| `website-router` | Deterministic route matching and cache-aware dispatch |
-| `website-protection` | Security headers, origin checks, and rate limiting primitives |
-| `website-config` | Environment-backed, typed service configuration |
-| `website-observability` | Tracing initialization helpers |
+| `website-encryption` | Authenticated encryption using AES-256-GCM |
+| `website-api` | Request and response building blocks with limits |
+| `website-cache` | TTL-based cache abstraction and bounded memory cache |
+| `website-router` | Route matching and deterministic cache keys |
+| `website-protection` | Security headers, origin checks, and rate limiting |
+| `website-config` | Typed environment configuration |
+| `website-observability` | Logging and tracing initialization |
+
+## Security-first design
+
+This project intentionally favors small, auditable building blocks instead of one giant server framework.
+
+Recommended architecture:
+
+1. Accept requests at the network boundary.
+2. Validate and cap request sizes.
+3. Apply origin, header, and rate-limit checks.
+4. Resolve the route.
+5. Cache only responses that are safe to cache.
+6. Encrypt sensitive data with explicit associated data.
+7. Log metadata only; never log keys, credentials, or raw secrets.
+
+## Example
+
+```rust
+use website_encryption::{Key, Sealer};
+
+fn main() -> Result<(), website_encryption::Error> {
+    let key = Key::from_bytes([42u8; 32]);
+    let sealer = Sealer::new(key);
+
+    let token = sealer.seal(b"sensitive website data", b"session:user-42")?;
+    let plaintext = sealer.open(&token, b"session:user-42")?;
+
+    println!("{}", String::from_utf8_lossy(&plaintext));
+    Ok(())
+}
+```
 
 ## Quick start
 
@@ -26,46 +97,48 @@ cargo test --workspace
 cargo run --manifest-path examples/secure-service/Cargo.toml
 ```
 
-```rust
-use website_encryption::{Key, Sealer};
+## Development
 
-let key = Key::from_bytes([7u8; 32]);
-let sealer = Sealer::new(key);
-let token = sealer.seal(b"private payload", b"user:42")?;
-let plaintext = sealer.open(&token, b"user:42")?;
-assert_eq!(plaintext, b"private payload");
-# Ok::<(), website_encryption::Error>(())
+```bash
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace --all-features
 ```
 
-## Security defaults
+## Language documentation
 
-- AES-256-GCM provides confidentiality **and integrity**; no custom cryptography is used.
-- Nonces are generated with the operating system random source.
-- Authentication context (AAD) binds ciphertext to its intended purpose.
-- Request bodies have explicit limits and rate limiting uses monotonic time.
-- Secrets should come from a secret manager or environment injection, never source control.
-- Use HTTPS/TLS at the edge and rotate encryption keys with a documented migration plan.
+English is the default. The project documentation is also provided in these languages:
 
-The encryption crate deliberately does not serialize keys, print secrets, or provide insecure fallback modes. See each crate's documentation for limitations.
+- [Hungarian](docs/README.hu.md)
+- [Spanish](docs/README.es.md)
+- [French](docs/README.fr.md)
+- [German](docs/README.de.md)
+- [Portuguese](docs/README.pt.md)
+- [Japanese](docs/README.ja.md)
+- [Korean](docs/README.ko.md)
+- [Arabic](docs/README.ar.md)
+- [Chinese (Simplified)](docs/README.zh.md)
+- [Russian](docs/README.ru.md)
 
-## Workspace layout
+## Security notes
 
-```text
-crates/
-├── encryption/          # authenticated encryption
-├── api/                 # request and response primitives
-├── cache/               # cache abstraction and memory cache
-├── router/              # route matching and cache selection
-├── website-protection/  # headers, origins, rate limits
-├── config/              # typed environment configuration
-└── observability/       # structured tracing setup
-examples/                # small integration examples
-docs/                    # design notes
-```
+- Keep encryption keys outside version control.
+- Use TLS everywhere in production.
+- Rotate keys with a controlled migration process.
+- Never trust client-side validation as a security boundary.
+- Prefer a real secret manager for production secrets.
+
+## Roadmap
+
+- add framework adapters for Actix and Axum
+- add example middleware stacks
+- add a secure session abstraction
+- add API contract validation helpers
+- add more production-grade security utilities
 
 ## Contributing
 
-Run `cargo fmt --all`, `cargo clippy --workspace --all-targets --all-features -- -D warnings`, and `cargo test --workspace` before opening a pull request. Please report security issues privately rather than opening a public issue; see `SECURITY.md`.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) before making changes.
 
 ## License
 
