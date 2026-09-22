@@ -11,8 +11,8 @@ A modular, security-first Rust toolkit for web services: authenticated data encr
 
 | Crate | Purpose |
 | --- | --- |
-| `website-encryption` | AES-256-GCM authenticated encryption with explicit key handling |
-| `website-api` | Small framework-agnostic request/response types and body limits |
+| `website-encryption` | AES-256-GCM authenticated data encryption |
+| `website-api` | Framework-agnostic request/response types and body limits |
 | `website-cache` | Pluggable cache trait and bounded in-memory implementation |
 | `website-router` | Deterministic route matching and cache-aware dispatch |
 | `website-protection` | Security headers, origin checks, and rate limiting primitives |
@@ -23,7 +23,7 @@ A modular, security-first Rust toolkit for web services: authenticated data encr
 
 ```bash
 cargo test --workspace
-cargo run --example secure-service
+cargo run --manifest-path examples/secure-service/Cargo.toml
 ```
 
 ```rust

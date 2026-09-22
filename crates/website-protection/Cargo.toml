@@ -4,6 +4,6 @@ version = "0.1.0"
 description = "Security headers, origin checks, and rate limiting primitives"
 license.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
-std-semaphore = "0.1"
