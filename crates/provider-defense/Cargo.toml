@@ -1,0 +1,9 @@
+[package]
+name = "website-provider-defense"
+version = "0.1.0"
+description = "Provider-neutral, privacy-aware automated abuse response primitives"
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]

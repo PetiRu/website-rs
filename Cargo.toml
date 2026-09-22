@@ -9,6 +9,7 @@ members = [
     "crates/captcha",
     "crates/ai-sandbox",
     "crates/csrf",
+    "crates/provider-defense",
     "crates/config",
     "crates/observability",
 ]

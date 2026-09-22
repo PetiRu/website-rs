@@ -1,38 +1,18 @@
-# Easy integration
-
-The project is designed for incremental adoption. Add only the package that matches your stack.
+# Integration guide
 
 ## Rust
 
 ```toml
 [dependencies]
-website-api = { git = "https://github.com/PetiRu/website-rs" }
-website-protection = { git = "https://github.com/PetiRu/website-rs" }
+website-provider-defense = { git = "https://github.com/PetiRu/website-rs" }
 website-captcha = { git = "https://github.com/PetiRu/website-rs" }
 website-csrf = { git = "https://github.com/PetiRu/website-rs" }
 ```
 
-Translate your framework request into `website_api::Request`, enforce limits, apply protection, verify CSRF for cookie-authenticated state-changing requests, then dispatch your handler.
+Map provider telemetry into coarse signals, call `evaluate`, and apply the returned response at your edge. Keep identity correlation, storage, and legal policy in the provider adapter.
 
-## Python, JavaScript, and TypeScript
+## Existing sites
 
-Install the local package while developing:
+Add controls incrementally: body limits, security headers, rate limiting, CAPTCHA for selected flows, CSRF for cookie-authenticated state changes, then provider-edge quotas and upstream scrubbing.
 
-```bash
-pip install -e packages/python
-cd packages/javascript && npm install
-cd ../typescript && npm install
-```
-
-The companion packages expose small helpers for security headers, rate limiting, CAPTCHA examples, and Web Crypto where supported. They are intentionally framework-neutral, so they can be wrapped by Flask/FastAPI, Express/Fastify, or another server.
-
-## Existing-site checklist
-
-1. Put TLS and a trusted proxy configuration at the edge.
-2. Add body limits before parsing large payloads.
-3. Add security headers without overwriting deliberate application policy.
-4. Apply rate limits by a carefully chosen identity.
-5. Use CSRF protection for cookie-authenticated state changes.
-6. Never cache private responses or authorization-bearing data.
-7. Keep keys and CAPTCHA answers server-side.
-8. Add integration tests for rejection paths.
+Do not deploy a global AI/IP blocklist. Use narrow, temporary, explainable responses and protect essential endpoints separately.

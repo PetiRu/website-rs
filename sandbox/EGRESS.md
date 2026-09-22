@@ -1,22 +1,16 @@
-# Egress gateway contract
+# AI sandbox internet contract
 
-The gateway is the only component allowed to make outbound requests for an AI worker.
+Internet-enabled AI workers must not receive unrestricted sockets. The host should run untrusted work in a separate VM or microVM and permit outbound requests only through a gateway.
 
-## Required controls
+Required gateway controls:
 
-- default-deny destination policy
-- HTTPS-only by default
-- DNS resolution performed by the gateway
-- block private, loopback, link-local, cloud metadata, and reserved ranges
-- re-check redirects against the same policy
-- maximum response bytes, download time, redirects, and concurrent requests
-- per-worker and per-tenant bandwidth quotas
-- request and response content-type limits
-- no arbitrary TCP, UDP, SMTP, or raw socket access unless explicitly reviewed
-- immutable audit events without secrets or full payloads
+- default-deny destinations and HTTPS-only by default
+- gateway-side DNS resolution and revalidation after redirects
+- blocking loopback, private, link-local, reserved, and cloud-metadata ranges
+- short-lived capability tokens bound to worker, method, destination, and budgets
+- limits for time, bytes, redirects, connections, processes, and output
+- no host filesystem, credentials, Docker socket, or cloud identity mounts
+- default-deny network egress except the gateway
+- kill and cleanup on timeout or policy violation
 
-## Capability tokens
-
-Issue short-lived, narrowly scoped capabilities containing the worker, destination class, method, byte budget, and expiry. Bind them to the worker identity and reject replay. A policy service should revoke capabilities when a budget or abuse threshold is reached.
-
-These controls reduce blast radius; they do not prove mathematical escape resistance. Keep the worker isolated at the VM or microVM layer.
+Cooperating agents cannot be made mathematically escape-proof by an application crate. Defense in depth and infrastructure isolation are mandatory.

@@ -1,45 +1,26 @@
-# Internet-enabled AI sandboxing and provider defenses
+# Internet provider defenses
 
-This directory documents a safe design for AI agents that need limited internet access and for providers that need to absorb coordinated automated abuse.
+This module is provider-neutral and can be activated by ISPs, VPN providers, hosting providers, CDNs, and enterprise networks. It is designed for coordinated automated resource exhaustion, including incidents where many agents target one another or shared infrastructure.
 
-> **Important limitation:** an in-process allowlist is not an escape-proof sandbox. No software package can honestly guarantee that cooperating agents cannot escape. Internet access must be mediated by an isolated worker, a default-deny egress proxy, and infrastructure-level controls.
+It does **not** identify a person as an AI, treat an IP as a person, or provide a permanent blocklist. VPNs, carrier-grade NAT, mobile networks, and shared proxies contain legitimate users.
 
-## Safe internet model
+## Activation model
 
-```text
-AI request
-   │ authenticated, schema-validated
-   ▼
-Policy service ── tool allowlist, budget, destination policy
-   │ signed short-lived capability
-   ▼
-Isolated worker ── non-root, read-only, no host secrets
-   │
-   ▼
-Egress gateway ── default deny, DNS pinning, URL/IP policy, quotas
-   │
-   ▼
-Internet
-```
+1. Observe traffic and aggregate privacy-preserving signals.
+2. Apply short-lived challenges and quotas.
+3. Throttle expensive operations and protect critical origins.
+4. Temporarily quarantine narrowly scoped traffic when multiple signals agree.
+5. Escalate verified incidents to upstream DDoS providers and affected operators.
+6. Review false positives and automatically expire emergency actions.
 
-Use a separate VM or microVM for untrusted code, not just a process sandbox. Disable host networking and metadata endpoints, mount no credentials, apply CPU/memory/process/output/time limits, and terminate the worker on policy violations.
+## Provider modules
 
-## Provider-neutral defenses
+- `provider-defense` — behavior scoring and graduated responses
+- `internet-provider-defenses/` — egress, detection, and operational guidance
+- provider adapters should translate local telemetry into coarse `Signals`; they should not export raw subscriber data unnecessarily
 
-The `internet-provider-defenses/` folder contains guidance applicable to ISPs, hosting providers, VPN providers, CDNs, and enterprise networks. It does not contain AT&T-specific bypasses or surveillance tooling.
+## Emergency mode
 
-Recommended controls:
+For hospital, emergency, payment, and other critical systems, use an independently operated circuit breaker and upstream scrubbing service. Prefer preserving essential traffic by endpoint and authenticated role rather than blocking an entire ASN, country, VPN, or carrier prefix.
 
-- per-account, per-IP, per-prefix, per-ASN, and per-destination rate limits
-- connection, request, bandwidth, and concurrency budgets
-- SYN/UDP amplification protection and upstream DDoS scrubbing
-- authenticated abuse reports and rapid quarantine workflows
-- bot signals combined with account and network context
-- privacy-preserving aggregation, short retention, and appeal paths
-- emergency circuit breakers that protect critical services
-
-## AI-automation detection
-
-Do not label a person, profile, or IP as AI-operated from one signal. Automation scores are probabilistic and can cause false positives, especially for NAT, VPN, Tor, mobile networks, accessibility tools, and shared infrastructure.
-
-Use multiple signals—request velocity, session consistency, token reuse, challenge outcomes, protocol fingerprints, and behavior over time—to trigger graduated actions such as proof-of-work, CAPTCHA, throttling, review, or temporary quarantine. Do not use the score alone for identity, access, or punishment.
+No software library can guarantee that cooperating agents cannot escape a sandbox. Use microVM/container isolation, default-deny egress, no host secrets, resource limits, and a kill path for untrusted execution.

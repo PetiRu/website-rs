@@ -1,34 +1,28 @@
-# Automated-abuse detection policy
+# Detection and response policy
 
-## Threat model
+## What may be scored
 
-This policy addresses coordinated automated traffic that exhausts compute, connection slots, bandwidth, or paid resources. It is intended for defensive operation by providers and service owners.
+Use coarse, explainable behavior signals:
 
-## Signal categories
+- request rate and concurrency
+- failed challenges and authentication failures
+- malformed protocol traffic
+- synchronized bursts across independent pseudonymous sources
+- resource cost and destination concentration
 
-Store only what is needed for the decision and prefer coarse or keyed values:
+Do not infer identity from an IP, VPN exit, ASN, device fingerprint, or language model detector. These signals are uncertain and can harm real users.
 
-- **traffic:** requests/minute, concurrent connections, bytes, error ratio
-- **identity:** account age, verified state, token reuse, device/session continuity
-- **protocol:** malformed requests, unusual method/path ratios, TLS or HTTP anomalies
-- **challenge:** rate of failed or abandoned challenges
-- **coordination:** synchronized bursts across accounts, prefixes, or destinations
+## Response ladder
 
-Never treat an IP address as a person. VPN, carrier-grade NAT, campuses, and proxies can represent many legitimate users.
+| Level | Response | Expiry |
+| --- | --- | --- |
+| low | observe | n/a |
+| medium | challenge and reduce expensive quotas | minutes |
+| high | throttle and require re-authentication | minutes |
+| critical | narrow temporary quarantine and upstream mitigation | minutes, renewable only with review |
 
-## Graduated response
+Every response should have a reason code, an expiry, an audit event without secrets, and an appeal or operator override. Permanent blocking requires a separate governance process and must not be inferred from a model score.
 
-1. Observe and aggregate.
-2. Add friction with a bounded challenge or proof-of-work.
-3. Reduce quotas and require re-authentication.
-4. Quarantine the account or automation token with an expiry.
-5. Escalate verified incidents to upstream providers.
-6. Preserve an appeal and false-positive review process.
+## Shared provider operation
 
-## Privacy and governance
-
-- Hash or tokenize identifiers with rotating keys.
-- Keep raw network data for the shortest operational period.
-- Restrict access and audit defensive decisions.
-- Publish retention, appeal, and emergency-blocking policies.
-- Require human review for durable account or network blocks.
+For AT&T, VPN, ISP, CDN, and hosting deployments, expose an adapter interface rather than hard-coding provider-specific surveillance or bypass behavior. Exchange incident indicators through authenticated, lawful channels, with data minimization and retention limits.
