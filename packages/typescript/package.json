@@ -1,0 +1,11 @@
+{
+  "name": "@websafers/security-typescript",
+  "version": "0.1.0",
+  "description": "Typed website security helpers",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": { "build": "tsc", "test": "npm run build" },
+  "devDependencies": { "typescript": "^5.0.0" },
+  "license": "MIT"
+}

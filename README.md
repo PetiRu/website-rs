@@ -1,97 +1,77 @@
-# website-rs
+# 🌐 website-rs
 
 <div align="center">
 
 # 🛡️ website-rs
 
-### Secure, modular building blocks for modern Rust web services
+### Security-first building blocks for websites, APIs, and web services
 
 [![CI](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/PetiRu/website-rs/actions/workflows/ci.yml)
-[![Rust](https://img.shields.io/badge/rust-1.75%2B-orange?logo=rust)](https://www.rust-lang.org/)
+[![Rust](https://img.shields.io/badge/Rust-1.75%2B-orange?logo=rust)](https://www.rust-lang.org/)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](packages/python/README.md)
+[![JavaScript](https://img.shields.io/badge/JavaScript-Web%20Crypto-F7DF1E?logo=javascript&logoColor=black)](packages/javascript/README.md)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5%2B-3178C6?logo=typescript&logoColor=white)](packages/typescript/README.md)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Security](https://img.shields.io/badge/security-first-success.svg)](SECURITY.md)
 
-**Encryption · APIs · Routing · Caching · Protection · Observability**
+**Encryption · API limits · Routing · Caching · Protection · CAPTCHA · Observability**
 
 </div>
 
 ---
 
-## ✨ What is website-rs?
+## What is website-rs?
 
-`website-rs` is a framework-agnostic Rust workspace for building safer APIs, websites, and backend services. It provides focused, composable primitives instead of hiding important behavior inside a large framework.
+`website-rs` is a framework-agnostic security toolkit for new and existing websites. The core implementation is Rust, with lightweight companion packages for Python, JavaScript, and TypeScript applications.
 
-Use the crates independently or combine them into a request pipeline that is easy to inspect, test, and evolve.
+Use one module, or compose a complete request pipeline. Nothing requires Axum, Actix, Django, Flask, Express, Fastify, or a particular runtime.
 
-> **Project status:** Early-stage foundation. Public APIs may change before 1.0. This project complements—not replaces—TLS, secret management, framework security controls, and professional security review.
+> **Status:** Early-stage foundation. APIs may change before 1.0. These packages complement—not replace—TLS, secret management, authorization, framework protections, or a professional security review.
 
-## 📚 Contents
+## Highlights
 
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Quick start](#-quick-start)
-- [Encryption example](#-encryption-example)
-- [Request pipeline](#-recommended-request-pipeline)
-- [Security principles](#-security-principles)
-- [Documentation](#-documentation)
-- [Development](#-development)
-- [Roadmap](#-roadmap)
-- [License](#-license)
+- 🔐 **Authenticated encryption** with AES-256-GCM in Rust and Web Crypto in JavaScript/TypeScript
+- 🧱 **Bounded inputs** with explicit request body limits
+- 🛡️ **Web hardening** with security headers, origin checks, and rate limiting
+- 🧩 **Pluggable CAPTCHA** with one-time custom challenges and a store interface
+- ⚡ **Cache-aware routing** with deterministic cache keys
+- 🔌 **Easy adoption** through standalone crates and language packages
+- 📚 **Readable docs** in 15 languages, including Hungarian
 
-## 🚀 Features
-
-| Crate | Responsibility |
-| --- | --- |
-| `website-encryption` | AES-256-GCM authenticated encryption with associated data |
-| `website-api` | Framework-neutral requests, responses, headers, and body limits |
-| `website-cache` | Bounded in-memory cache with TTL support and a simple trait |
-| `website-router` | Explicit route resolution and stable cache-key generation |
-| `website-protection` | Security headers, exact origin checks, and rate limiting |
-| `website-config` | Typed environment-based service configuration |
-| `website-observability` | Consistent tracing initialization |
-
-### Design goals
-
-- **Secure by default:** authenticated encryption, bounded resources, and explicit failure paths.
-- **Small and composable:** use only the crates your service needs.
-- **Framework-neutral:** integrate with Axum, Actix Web, Warp, or a custom HTTP layer.
-- **Easy to audit:** clear boundaries, focused APIs, and rejection-path tests.
-- **Operationally aware:** configuration, tracing, caching, and security guidance belong together.
-
-## 🧭 Architecture
+## Architecture
 
 ```text
-                    ┌──────────────────────────┐
-                    │   HTTP framework/edge    │
-                    └────────────┬─────────────┘
-                                 │
-                    ┌────────────▼─────────────┐
-                    │ website-api              │  validate + limit
-                    └────────────┬─────────────┘
-                                 │
-             ┌───────────────────▼───────────────────┐
-             │ website-protection                    │
-             │ headers · origins · rate limits       │
-             └───────────────────┬───────────────────┘
-                                 │
-                    ┌────────────▼─────────────┐
-                    │ website-router           │  resolve + key
-                    └───────┬─────────┬────────┘
-                            │         │
-                 ┌──────────▼───┐ ┌──▼─────────────┐
-                 │ website-cache │ │ application    │
-                 │ safe TTL data │ │ business logic │
-                 └──────────────┘ └──────┬─────────┘
-                                         │
-                              ┌──────────▼──────────┐
-                              │ website-encryption  │
-                              │ sensitive payloads  │
-                              └─────────────────────┘
+HTTP framework / serverless edge
+              │
+              ▼
+       Request validation ── body limits, method checks
+              │
+              ▼
+       Website protection ── headers, origins, rate limits, CAPTCHA
+              │
+              ▼
+       Router + cache ────── dispatch and safe response caching
+              │
+              ▼
+       Application logic
+              │
+              ▼
+       Encryption + observability
 ```
 
-See the [architecture guide](docs/ARCHITECTURE.md) for boundaries and integration guidance.
+## Packages by language
 
-## ⚡ Quick start
+| Language | Package | Best for |
+| --- | --- | --- |
+| Rust | `website-encryption`, `website-api`, `website-protection`, `website-captcha` | high-performance services and shared infrastructure |
+| Python | `website-rs-security` | Flask, Django, FastAPI, and Python APIs |
+| JavaScript | `@websafers/security` | Node.js, Express, Fastify, and browser-compatible utilities |
+| TypeScript | `@websafers/security` | typed Node.js and full-stack TypeScript applications |
+
+The language packages provide compatible integration ideas, not automatic wire compatibility. Read each package's security notes before production use.
+
+## Quick start
+
+### Rust workspace
 
 ```bash
 git clone https://github.com/PetiRu/website-rs.git
@@ -100,9 +80,38 @@ cargo test --workspace
 cargo run --manifest-path examples/secure-service/Cargo.toml
 ```
 
-Expected example output includes an encrypted payload length and its safely decrypted demonstration value.
+### Python
 
-## 🔐 Encryption example
+```bash
+pip install -e packages/python
+```
+
+```python
+from website_rs_security import MemoryCaptcha, security_headers
+
+captcha = MemoryCaptcha()
+challenge, answer_for_demo = captcha.issue_math()
+assert captcha.verify(challenge.token, answer_for_demo)
+headers = security_headers()
+```
+
+### JavaScript
+
+```bash
+cd packages/javascript
+npm install
+npm test
+```
+
+### TypeScript
+
+```bash
+cd packages/typescript
+npm install
+npm test
+```
+
+## Rust encryption example
 
 ```rust
 use website_encryption::{Key, Sealer};
@@ -111,63 +120,66 @@ fn main() -> Result<(), website_encryption::Error> {
     // Demonstration key only. Load production keys from a secret manager.
     let sealer = Sealer::new(Key::from_bytes([42u8; 32]));
     let context = b"session:user-42:v1";
-
     let token = sealer.seal(b"sensitive website data", context)?;
     let plaintext = sealer.open(&token, context)?;
-
     assert_eq!(plaintext, b"sensitive website data");
     Ok(())
 }
 ```
 
-The encrypted format is `nonce || ciphertext || authentication tag`. Never reuse a key across unrelated trust domains without a deliberate key-management design, and never commit real keys.
+## Custom CAPTCHA
 
-## 🔄 Recommended request pipeline
+`website-captcha` is deliberately a primitive rather than a misleading one-size-fits-all CAPTCHA product. It supports one-time challenges and a `ChallengeStore` trait so applications can use Redis, a database, or another bounded shared store.
 
-1. Parse the request at the HTTP boundary.
-2. Enforce method, framing, and body-size limits.
-3. Apply origin policy, security headers, and rate limiting.
-4. Authenticate and authorize the caller.
-5. Resolve the route.
-6. Read or write the cache only when the data is safe for that cache scope.
-7. Encrypt sensitive values with purpose-specific associated data.
-8. Emit structured telemetry without credentials, tokens, keys, or raw sensitive bodies.
+```rust
+use std::time::Duration;
+use website_captcha::{ChallengeStore, MemoryCaptcha};
 
-## 🛡️ Security principles
-
-- **Authenticated encryption:** confidentiality without sacrificing integrity.
-- **No custom cryptography:** established Rust crypto crates provide the primitive.
-- **Bounded resources:** body limits and bounded cache capacity help control abuse.
-- **Explicit cache policy:** private or secret-bearing responses must not be cached by default.
-- **Defense in depth:** use TLS, secure headers, input validation, authorization, and secret management together.
-- **Fail closed:** lock failures and authentication failures do not silently grant access.
-
-Read [SECURITY.md](SECURITY.md) before using the project in production.
-
-## 🗂️ Repository layout
-
-```text
-crates/                 reusable Rust modules
-examples/               runnable integration examples
-docs/                   architecture and localized documentation
-website-protection/     module overview and security notes
-cache/                  cache overview and usage notes
-router/                 routing overview and boundaries
-.github/workflows/      continuous integration
+let captcha = MemoryCaptcha::new();
+let (challenge, answer) = captcha.issue_math(Duration::from_secs(120));
+captcha.verify(&challenge.token, &answer)?;
+# Ok::<(), website_captcha::Error>(())
 ```
 
-## 🌍 Documentation
+Do not expose the answer to a browser in production. Combine CAPTCHA with rate limiting, CSRF protection where applicable, telemetry, and server-side validation. It must not be the only control for login, payments, authorization, or account recovery.
+
+## Recommended request pipeline
+
+1. Parse at the HTTP boundary.
+2. Enforce method, framing, and body-size limits.
+3. Apply security headers and exact origin policy.
+4. Apply rate limiting and, where appropriate, CAPTCHA.
+5. Authenticate and authorize the request.
+6. Resolve the route.
+7. Cache only data safe for that cache scope.
+8. Encrypt sensitive values with purpose-specific associated data.
+9. Log metadata without credentials, tokens, keys, or raw sensitive bodies.
+
+## Repository layout
+
+```text
+crates/                 Rust modules
+packages/python/        Python integration package
+packages/javascript/    JavaScript Web Crypto package
+packages/typescript/    TypeScript typed package
+examples/               runnable examples
+docs/                   architecture, integration, and translations
+```
+
+## Documentation
 
 - [Documentation index](docs/README.md)
 - [Architecture guide](docs/ARCHITECTURE.md)
+- [Integration guide](docs/INTEGRATION.md)
+- [CAPTCHA security notes](docs/CAPTCHA.md)
 - [Security policy](SECURITY.md)
 - [Contributing guide](CONTRIBUTING.md)
 
-### Read in your language
+### Languages
 
-[English](README.md) · [Magyar / Hungarian](docs/README.hu.md) · [Español](docs/README.es.md) · [Français](docs/README.fr.md) · [Deutsch](docs/README.de.md) · [Português](docs/README.pt.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [العربية](docs/README.ar.md) · [Русский](docs/README.ru.md) · [简体中文](docs/README.zh.md)
+[English](README.md) · [Magyar](docs/README.hu.md) · [Español](docs/README.es.md) · [Français](docs/README.fr.md) · [Deutsch](docs/README.de.md) · [Português](docs/README.pt.md) · [Italiano](docs/README.it.md) · [Türkçe](docs/README.tr.md) · [Polski](docs/README.pl.md) · [Українська](docs/README.uk.md) · [Nederlands](docs/README.nl.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [العربية](docs/README.ar.md) · [Русский](docs/README.ru.md) · [简体中文](docs/README.zh.md)
 
-## 🧪 Development
+## Development
 
 ```bash
 cargo fmt --all -- --check
@@ -175,18 +187,16 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 ```
 
-Please add tests for new security-sensitive behavior and do not include credentials in issues, commits, logs, or examples.
+Language-package checks are documented in their package READMEs. Never commit real credentials, keys, tokens, or CAPTCHA answers.
 
-## 🗺️ Roadmap
+## Roadmap
 
-- [ ] Add Axum and Actix integration examples
-- [ ] Add a production-oriented session abstraction
-- [ ] Add configurable cache eviction policies
-- [ ] Add broader API contract validation helpers
-- [ ] Review public APIs before the 1.0 release
+- [ ] Framework adapters for Axum, Actix, Flask, FastAPI, Express, and Fastify
+- [ ] Shared cache-store adapters
+- [ ] Signed-token and CSRF modules after threat-model review
+- [ ] Cross-language interoperability fixtures
+- [ ] Public API review before 1.0
 
-Ideas and focused improvements are welcome through issues and pull requests.
+## License
 
-## 📄 License
-
-Released under the [MIT License](LICENSE).
+MIT. See [LICENSE](LICENSE).
