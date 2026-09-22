@@ -1,0 +1,10 @@
+[package]
+name = "website-ai-sandbox"
+version = "0.1.0"
+description = "Policy sandbox primitives for AI tool requests"
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+thiserror.workspace = true
