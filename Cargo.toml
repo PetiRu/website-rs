@@ -6,6 +6,7 @@ members = [
     "crates/cache",
     "crates/router",
     "crates/website-protection",
+    "crates/captcha",
     "crates/config",
     "crates/observability",
 ]

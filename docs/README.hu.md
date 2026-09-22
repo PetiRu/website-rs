@@ -1,26 +1,15 @@
 # website-rs
 
-A modern, security-oriented Rust workspace for building safe web services and API backends.
+Moduláris, biztonságközpontú Rust munkaterület weboldalak és API-k építéséhez.
 
-## Áttekintés
+## Fő funkciók
 
-A `website-rs` célja, hogy a webes alkalmazásokhoz szükséges biztonsági és infrastruktúra-alapú építőelemeket jól strukturált, moduláris Rust csomagok formájában kínálja. Ide tartozik:
-
-- hitelesített titkosítás
-- HTTP kérés és válasz kezelés
-- cache és routing alapok
-- webes biztonsági védelmi elemek
-- konfiguráció és megfigyelhetőség
-
-## Fő modulok
-
-- `website-encryption`: AES-256-GCM alapú titkosítás
-- `website-api`: kérés/válasz absztrakciók és méretkorlátok
-- `website-cache`: TTL alapú memória cache
-- `website-router`: útvonal feloldás és cache kulcsok
-- `website-protection`: fejlécek, origin ellenőrzés, rate limiting
-- `website-config`: környezeti konfiguráció
-- `website-observability`: logging és tracing
+- hitelesített AES-256-GCM titkosítás
+- HTTP kérés- és válaszkezelési alapok
+- TTL cache és útválasztás
+- biztonsági fejlécek, origin-ellenőrzés és rate limiting
+- opcionális, egyszer használható matematikai CAPTCHA-primitív
+- könnyű integráció Axum, Actix, Warp vagy saját szerverréteggel
 
 ## Gyors kezdés
 
@@ -29,15 +18,12 @@ cargo test --workspace
 cargo run --manifest-path examples/secure-service/Cargo.toml
 ```
 
-## Biztonsági irányelvek
+## Integráció
 
-- A kulcsokat soha ne tedd verziókezelés alá.
-- Production környezetben használj TLS-t és titkos kulcstárolót.
-- A titkosítási kulcsokat rendszeresen cseréld és migráld biztonságosan.
-- A kliens oldali validáció nem biztonsági határ.
+A szükséges crate-eket külön is hozzáadhatod a `Cargo.toml` fájlhoz. A `website-captcha` fejlesztéshez és alacsony kockázatú űrlapokhoz használható; éles rendszernél közös tároló, rate limiting és további botvédelem szükséges.
 
-## Források
+Részletek: [integrációs útmutató](INTEGRATION.md), [architektúra](ARCHITECTURE.md), [fő README](../README.md).
 
-- [README.md](../README.md)
-- [CONTRIBUTING.md](../CONTRIBUTING.md)
-- [SECURITY.md](../SECURITY.md)
+## Biztonság
+
+A kulcsokat ne tárold Gitben, használj TLS-t, és ne kezeld a kliensoldali validációt biztonsági határként.

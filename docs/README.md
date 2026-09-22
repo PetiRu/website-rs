@@ -1,35 +1,21 @@
-# Documentation index
+# website-rs language guide
 
-Welcome to the `website-rs` documentation. Start with the guide that matches your goal.
-
-## Start here
-
-| Goal | Recommended document |
-| --- | --- |
-| Understand the project | [Main README](../README.md) |
-| Understand module boundaries | [Architecture guide](ARCHITECTURE.md) |
-| Contribute code | [Contributing guide](../CONTRIBUTING.md) |
-| Report a vulnerability | [Security policy](../SECURITY.md) |
-
-## Localized overviews
+The main README is available in English plus these localized overviews:
 
 - [Hungarian / Magyar](README.hu.md)
 - [Spanish / Español](README.es.md)
 - [French / Français](README.fr.md)
 - [German / Deutsch](README.de.md)
 - [Portuguese / Português](README.pt.md)
-- [Japanese / 日本語](README.ja.md)
-- [Korean / 한국어](README.ko.md)
-- [Arabic / العربية](README.ar.md)
-- [Russian / Русский](README.ru.md)
-- [Simplified Chinese / 简体中文](README.zh.md)
+- [Italiano](README.it.md)
+- [Türkçe](README.tr.md)
+- [Polski](README.pl.md)
+- [Українська](README.uk.md)
+- [Nederlands](README.nl.md)
+- [日本語](README.ja.md)
+- [한국어](README.ko.md)
+- [العربية](README.ar.md)
+- [Русский](README.ru.md)
+- [简体中文](README.zh.md)
 
-## Documentation principles
-
-The documentation follows the same principles as the code:
-
-- explain boundaries before implementation details
-- show safe usage before advanced usage
-- identify production limitations honestly
-- keep security-sensitive behavior explicit
-- prefer short examples that can be tested
+Translations are concise project overviews. The English architecture and security documents remain authoritative when details differ.

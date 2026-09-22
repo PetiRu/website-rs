@@ -1,0 +1,11 @@
+[package]
+name = "website-captcha"
+version = "0.1.0"
+description = "Pluggable, privacy-conscious human verification primitives"
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+rand = "0.8"
+thiserror.workspace = true
